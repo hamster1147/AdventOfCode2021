@@ -6,10 +6,12 @@ import java.util.Scanner;
 class Position {
     public int m_x;
     public int m_depth;
+    public int m_aim;
 
     public Position(int x, int depth) {
         m_x = x;
         m_depth = depth;
+        m_aim = 0;
     }
 
     public Position() {
@@ -19,6 +21,12 @@ class Position {
     public void add(Position other) {
         m_x += other.m_x;
         m_depth += other.m_depth;
+    }
+
+    public void addPart2(Position other) {
+        m_aim += other.m_depth;
+        m_x += other.m_x;
+        m_depth += m_aim * other.m_x;
     }
 }
 
@@ -37,6 +45,7 @@ class Day2 {
         }
 
         System.out.println("Part 1 Answer: " + part1(data));
+        System.out.println("Part 2 Answer: " + part2(data));
     }
 
     static public ArrayList<Position> parseDataFile(String filePath) {
@@ -72,7 +81,7 @@ class Day2 {
     /**
      * Part 1 of Day 2 Challenge.
      * 
-     * @param data List of int values parsed from input file.
+     * @param data List of Position objects parsed from input file.
      * @return The answer for part 1.
      */
     static public int part1(ArrayList<Position> data) {
@@ -80,6 +89,22 @@ class Day2 {
 
         for (Position value : data) {
             pos.add(value);
+        }
+
+        return pos.m_x * pos.m_depth;
+    }
+
+    /**
+     * Part 2 of Day 2 Challenge.
+     * 
+     * @param data List of Position objects parsed from input file.
+     * @return The answer for part 2.
+     */
+    static public int part2(ArrayList<Position> data) {
+        Position pos = new Position();
+
+        for (Position value : data) {
+            pos.addPart2(value);
         }
 
         return pos.m_x * pos.m_depth;
