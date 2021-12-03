@@ -10,7 +10,7 @@ class Day1 {
         if (args.length >= 2) {
             data = parseDataFile(args[1]);
         } else {
-            data = parseDataFile("Day1_Input.csv");
+            data = parseDataFile("Day1/Day1_Input.csv");
         }
 
         System.out.println("Part 1 Answer: " + part1(data));
