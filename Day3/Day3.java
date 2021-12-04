@@ -84,136 +84,76 @@ class Day3 {
     }
 
     /**
-     * Part 2 of Day 3 Challenge. My solution is a little involved. The idea is to
-     * make a 2D table, each cell is the majority of 1 bits from that position to
-     * the end of file.
+     * Part 2 of Day 3 Challenge.
      * 
      * @param data List of boolean "bit" arrays parsed from input file.
      * @return The answer for part 1.
      */
     static public int part2(ArrayList<ArrayList<Boolean>> data) {
-        int total = data.size();
-
-        // Transpose list because my solution is too big to fail now
-        ArrayList<ArrayList<Boolean>> dataTransposed = new ArrayList<ArrayList<Boolean>>();
-        for (ArrayList<Boolean> bitList : data) {
-            int i = 0;
-            for (Boolean bit : bitList) {
-                if (dataTransposed.size() <= i) {
-                    dataTransposed.add(new ArrayList<Boolean>());
-                }
-                dataTransposed.get(i).add(bit);
-                i++;
-            }
-        }
-
-        // Find Oxygen Rate
-        ArrayList<ArrayList<Double>> oxygenTallyGraph = new ArrayList<ArrayList<Double>>();
-        for (ArrayList<Boolean> bitList : dataTransposed) {
-            int i = 0;
-            ArrayList<Double> singleBitOxygenTallyGraph = new ArrayList<Double>();
-            for (Boolean bit : bitList) {
-                if (singleBitOxygenTallyGraph.size() <= i) {
-                    singleBitOxygenTallyGraph.add(0.0); // Add new entry
-                }
-
-                // Why the heck is the toIndex for subList exclusive?
-                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(i, total));
-                for (Boolean subBit : subBitList) {
-                    if (subBit) {
-                        double incremented = singleBitOxygenTallyGraph.get(i).doubleValue() + 1.0;
-                        singleBitOxygenTallyGraph.set(i, Double.valueOf(incremented));
-                    }
-                }
-
-                double percent = singleBitOxygenTallyGraph.get(i) / (total - i);
-                singleBitOxygenTallyGraph.set(i, percent);
-                i++;
-            }
-            oxygenTallyGraph.add(singleBitOxygenTallyGraph);
-        }
-
-        int oxygen_i = 0;
-        boolean oxygen_found = false;
-
-        for (ArrayList<Double> onesTally : oxygenTallyGraph) {
-            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(oxygen_i, total));
-            int temp_i = oxygen_i;
-            for (Double onesPercent : onesTallySub) {
-                if (Math.abs(onesPercent - 0.5) < 1.0e-9) {
-                    oxygen_i = temp_i;
-                    break;
-                }
-                temp_i++;
-
-                if (temp_i == total) {
-                    oxygen_found = true;
-                    break;
+        // Find Oxygen
+        ArrayList<Boolean> oxygenBitArray = new ArrayList<Boolean>();
+        ArrayList<ArrayList<Boolean>> oxygenList = data;
+        for (int i = 0; i < data.get(0).size(); i++) {
+            int tally = 0;
+            for (ArrayList<Boolean> bits : oxygenList) {
+                if (bits.get(i)) {
+                    tally++;
                 }
             }
 
-            if (oxygen_found) {
+            boolean oneMajority = (tally > (oxygenList.size() - tally));
+            ArrayList<ArrayList<Boolean>> newOxygenList = new ArrayList<ArrayList<Boolean>>();
+
+            for (ArrayList<Boolean> bits : oxygenList) {
+                if (bits.get(i) == oneMajority) {
+                    newOxygenList.add(bits);
+                }
+            }
+
+            if (newOxygenList.size() == 1) {
+                oxygenBitArray = newOxygenList.get(0);
                 break;
             }
+
+            oxygenList = newOxygenList;
         }
 
         int oxygen = 0;
-        for (Boolean oxygenBit : data.get(oxygen_i)) {
+        for (Boolean oxygenBit : oxygenBitArray) {
             oxygen = (oxygen << 1) | (oxygenBit ? 1 : 0);
         }
 
-        // Find CO2 Rate
-        ArrayList<ArrayList<Double>> co2TallyGraph = new ArrayList<ArrayList<Double>>();
-        for (ArrayList<Boolean> bitList : dataTransposed) {
-            int i = 0;
-            ArrayList<Double> singleBitCo2TallyGraph = new ArrayList<Double>();
-            for (Boolean bit : bitList) {
-                if (singleBitCo2TallyGraph.size() <= i) {
-                    singleBitCo2TallyGraph.add(0.0); // Add new entry
-                }
-
-                // Why the heck is the toIndex for subList exclusive?
-                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(i, total));
-                for (Boolean subBit : subBitList) {
-                    if (!subBit) {
-                        double incremented = singleBitCo2TallyGraph.get(i).doubleValue() + 1.0;
-                        singleBitCo2TallyGraph.set(i, Double.valueOf(incremented));
-                    }
-                }
-
-                double percent = singleBitCo2TallyGraph.get(i) / (total - i);
-                singleBitCo2TallyGraph.set(i, percent);
-                i++;
-            }
-            co2TallyGraph.add(singleBitCo2TallyGraph);
-        }
-
-        int co2_i = 0;
-        boolean co2_found = false;
-
-        for (ArrayList<Double> onesTally : co2TallyGraph) {
-            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(co2_i, total));
-            int temp_i = co2_i;
-            for (Double onesPercent : onesTallySub) {
-                if (Math.abs(onesPercent - 0.5) < 1.0e-9) {
-                    co2_i = temp_i;
-                    break;
-                }
-                temp_i++;
-
-                if (temp_i == total) {
-                    co2_found = true;
-                    break;
+        // Find CO2
+        ArrayList<Boolean> co2BitArray = new ArrayList<Boolean>();
+        ArrayList<ArrayList<Boolean>> co2List = data;
+        for (int i = 0; i < data.get(0).size(); i++) {
+            int tally = 0;
+            for (ArrayList<Boolean> bits : co2List) {
+                if (bits.get(i)) {
+                    tally++;
                 }
             }
 
-            if (co2_found) {
+            boolean oneMinority = (tally < (co2List.size() - tally));
+            ArrayList<ArrayList<Boolean>> newCo2List = new ArrayList<ArrayList<Boolean>>();
+
+            for (ArrayList<Boolean> bits : co2List) {
+                if (bits.get(i) == oneMinority) {
+                    newCo2List.add(bits);
+                }
+            }
+
+            if (newCo2List.size() == 1) {
+                co2BitArray = newCo2List.get(0);
                 break;
             }
+
+            co2List = newCo2List;
+            i++;
         }
 
         int co2 = 0;
-        for (Boolean co2Bit : data.get(co2_i)) {
+        for (Boolean co2Bit : co2BitArray) {
             co2 = (co2 << 1) | (co2Bit ? 1 : 0);
         }
 
