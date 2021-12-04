@@ -14,6 +14,7 @@ class Day3 {
         }
 
         System.out.println("Part 1 Answer: " + part1(data));
+        System.out.println("Part 2 Answer: " + part2(data));
     }
 
     static public ArrayList<ArrayList<Boolean>> parseDataFile(String filePath) {
@@ -80,5 +81,44 @@ class Day3 {
         }
 
         return epsilon * gamma;
+    }
+
+    /**
+     * Part 2 of Day 3 Challenge. My solution is a little involved. The idea is to
+     * make a 2D table, each cell is the majority of 1 bits from that position to
+     * the end of file.
+     * 
+     * @param data List of boolean "bit" arrays parsed from input file.
+     * @return The answer for part 1.
+     */
+    static public int part2(ArrayList<ArrayList<Boolean>> data) {
+        int total = data.size();
+        ArrayList<ArrayList<Double>> onesTallyGraph = new ArrayList<ArrayList<Double>>();
+
+        for (ArrayList<Boolean> bitList : data) {
+            int i = 0;
+            int j = 0;
+            ArrayList<Double> singleBitOnesTallyGraph = new ArrayList<Double>();
+            for (Boolean bit : bitList) {
+                if (singleBitOnesTallyGraph.size() <= j) {
+                    singleBitOnesTallyGraph.add(0.0); // Add new entry
+                }
+
+                ArrayList<Boolean> subBitList = (ArrayList<Boolean>) bitList.subList(j, total - 1);
+                for (Boolean subBit : subBitList) {
+                    if (subBit) {
+                        double incremented = singleBitOnesTallyGraph.get(j).doubleValue() + 1.0;
+                        singleBitOnesTallyGraph.set(j, Double.valueOf(incremented));
+                    }
+                }
+
+                double percent = singleBitOnesTallyGraph.get(j) / (total - j);
+                singleBitOnesTallyGraph.set(j, percent);
+                j++;
+            }
+            onesTallyGraph.add(singleBitOnesTallyGraph);
+        }
+
+        return 1;
     }
 }
