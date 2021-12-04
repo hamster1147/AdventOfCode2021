@@ -117,7 +117,8 @@ class Day3 {
                     singleBitOnesTallyGraph.add(0.0); // Add new entry
                 }
 
-                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(j, total - 1));
+                // Why the heck is the toIndex for subList exclusive?
+                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(j, total));
                 for (Boolean subBit : subBitList) {
                     if (subBit) {
                         double incremented = singleBitOnesTallyGraph.get(j).doubleValue() + 1.0;
@@ -132,6 +133,63 @@ class Day3 {
             onesTallyGraph.add(singleBitOnesTallyGraph);
         }
 
-        return 1;
+        int i = 0;
+        boolean found = false;
+
+        // Find Oxygen Rate
+        int oxygen = 0;
+        for (ArrayList<Double> onesTally : onesTallyGraph) {
+            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(i, total));
+            int temp_i = i;
+            for (Double onesPercent : onesTally) {
+                if (Math.abs(onesPercent - 0.5) < 1.0e-9) {
+                    i = temp_i;
+                    break;
+                }
+                temp_i++;
+
+                if (temp_i == total) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                break;
+            }
+        }
+
+        for (Boolean oxygenBit : data.get(i)) {
+            oxygen = (oxygen << 1) | (oxygenBit ? 1 : 0);
+        }
+
+        // Find CO2 Rate
+        int co2 = 0;
+        for (ArrayList<Double> onesTally : onesTallyGraph) {
+            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(i, total));
+            int temp_i = i;
+            for (Double onesPercent : onesTally) {
+                if (Math.abs((1.0 - onesPercent) - 0.5) < 1.0e-9) {
+                    i = temp_i;
+                    break;
+                }
+                temp_i++;
+
+                if (temp_i == total) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                break;
+            }
+        }
+
+        for (Boolean co2Bit : data.get(i)) {
+            co2 = (co2 << 1) | (co2Bit ? 1 : 0);
+        }
+
+        return oxygen * co2;
     }
 }
