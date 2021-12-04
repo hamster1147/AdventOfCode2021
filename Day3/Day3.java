@@ -52,13 +52,13 @@ class Day3 {
         for (ArrayList<Boolean> bitList : data) {
             int i = 0;
             for (Boolean bit : bitList) {
+                if (onesTally.size() <= i) {
+                    onesTally.add(0); // Add new entry
+                }
+
                 if (bit) {
-                    if (onesTally.size() <= i) {
-                        onesTally.add(1); // Add new entry
-                    } else {
-                        int incremented = onesTally.get(i).intValue() + 1;
-                        onesTally.set(i, Integer.valueOf(incremented));
-                    }
+                    int incremented = onesTally.get(i).intValue() + 1;
+                    onesTally.set(i, Integer.valueOf(incremented));
                 }
                 i++;
             }
@@ -67,8 +67,7 @@ class Day3 {
         ArrayList<Boolean> gammaBitArray = new ArrayList<Boolean>();
 
         for (Integer ones : onesTally) {
-            double percentOnes = (double) ones.intValue() / (double) total;
-            boolean onesMajority = percentOnes >= 0.5;
+            boolean onesMajority = ones.intValue() >= (total - ones.intValue());
             gammaBitArray.add(Boolean.valueOf(onesMajority));
         }
 
