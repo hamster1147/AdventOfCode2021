@@ -95,7 +95,20 @@ class Day3 {
         int total = data.size();
         ArrayList<ArrayList<Double>> onesTallyGraph = new ArrayList<ArrayList<Double>>();
 
+        // Transpose list because my solution is too big to fail now
+        ArrayList<ArrayList<Boolean>> dataTransposed = new ArrayList<ArrayList<Boolean>>();
         for (ArrayList<Boolean> bitList : data) {
+            int i = 0;
+            for (Boolean bit : bitList) {
+                if (dataTransposed.size() <= i) {
+                    dataTransposed.add(new ArrayList<Boolean>());
+                }
+                dataTransposed.get(i).add(bit);
+                i++;
+            }
+        }
+
+        for (ArrayList<Boolean> bitList : dataTransposed) {
             int i = 0;
             int j = 0;
             ArrayList<Double> singleBitOnesTallyGraph = new ArrayList<Double>();
@@ -104,7 +117,7 @@ class Day3 {
                     singleBitOnesTallyGraph.add(0.0); // Add new entry
                 }
 
-                ArrayList<Boolean> subBitList = (ArrayList<Boolean>) bitList.subList(j, total - 1);
+                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(j, total - 1));
                 for (Boolean subBit : subBitList) {
                     if (subBit) {
                         double incremented = singleBitOnesTallyGraph.get(j).doubleValue() + 1.0;
