@@ -101,7 +101,12 @@ class Day3 {
                 }
             }
 
-            boolean oneMajority = (tally > (oxygenList.size() - tally));
+            boolean oneMajority = false;
+            if (tally == (oxygenList.size() - tally)) {
+                oneMajority = true;
+            } else {
+                oneMajority = (tally > (oxygenList.size() - tally));
+            }
             ArrayList<ArrayList<Boolean>> newOxygenList = new ArrayList<ArrayList<Boolean>>();
 
             for (ArrayList<Boolean> bits : oxygenList) {
@@ -134,7 +139,12 @@ class Day3 {
                 }
             }
 
-            boolean oneMinority = (tally < (co2List.size() - tally));
+            boolean oneMinority = false;
+            if (tally == (co2List.size() - tally)) {
+                oneMinority = false;
+            } else {
+                oneMinority = (tally < (co2List.size() - tally));
+            }
             ArrayList<ArrayList<Boolean>> newCo2List = new ArrayList<ArrayList<Boolean>>();
 
             for (ArrayList<Boolean> bits : co2List) {
@@ -149,7 +159,6 @@ class Day3 {
             }
 
             co2List = newCo2List;
-            i++;
         }
 
         int co2 = 0;
