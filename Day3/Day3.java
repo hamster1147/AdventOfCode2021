@@ -93,7 +93,6 @@ class Day3 {
      */
     static public int part2(ArrayList<ArrayList<Boolean>> data) {
         int total = data.size();
-        ArrayList<ArrayList<Double>> onesTallyGraph = new ArrayList<ArrayList<Double>>();
 
         // Transpose list because my solution is too big to fail now
         ArrayList<ArrayList<Boolean>> dataTransposed = new ArrayList<ArrayList<Boolean>>();
@@ -108,85 +107,113 @@ class Day3 {
             }
         }
 
+        // Find Oxygen Rate
+        ArrayList<ArrayList<Double>> oxygenTallyGraph = new ArrayList<ArrayList<Double>>();
         for (ArrayList<Boolean> bitList : dataTransposed) {
             int i = 0;
-            int j = 0;
-            ArrayList<Double> singleBitOnesTallyGraph = new ArrayList<Double>();
+            ArrayList<Double> singleBitOxygenTallyGraph = new ArrayList<Double>();
             for (Boolean bit : bitList) {
-                if (singleBitOnesTallyGraph.size() <= j) {
-                    singleBitOnesTallyGraph.add(0.0); // Add new entry
+                if (singleBitOxygenTallyGraph.size() <= i) {
+                    singleBitOxygenTallyGraph.add(0.0); // Add new entry
                 }
 
                 // Why the heck is the toIndex for subList exclusive?
-                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(j, total));
+                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(i, total));
                 for (Boolean subBit : subBitList) {
                     if (subBit) {
-                        double incremented = singleBitOnesTallyGraph.get(j).doubleValue() + 1.0;
-                        singleBitOnesTallyGraph.set(j, Double.valueOf(incremented));
+                        double incremented = singleBitOxygenTallyGraph.get(i).doubleValue() + 1.0;
+                        singleBitOxygenTallyGraph.set(i, Double.valueOf(incremented));
                     }
                 }
 
-                double percent = singleBitOnesTallyGraph.get(j) / (total - j);
-                singleBitOnesTallyGraph.set(j, percent);
-                j++;
+                double percent = singleBitOxygenTallyGraph.get(i) / (total - i);
+                singleBitOxygenTallyGraph.set(i, percent);
+                i++;
             }
-            onesTallyGraph.add(singleBitOnesTallyGraph);
+            oxygenTallyGraph.add(singleBitOxygenTallyGraph);
         }
 
-        int i = 0;
-        boolean found = false;
+        int oxygen_i = 0;
+        boolean oxygen_found = false;
 
-        // Find Oxygen Rate
-        int oxygen = 0;
-        for (ArrayList<Double> onesTally : onesTallyGraph) {
-            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(i, total));
-            int temp_i = i;
-            for (Double onesPercent : onesTally) {
+        for (ArrayList<Double> onesTally : oxygenTallyGraph) {
+            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(oxygen_i, total));
+            int temp_i = oxygen_i;
+            for (Double onesPercent : onesTallySub) {
                 if (Math.abs(onesPercent - 0.5) < 1.0e-9) {
-                    i = temp_i;
+                    oxygen_i = temp_i;
                     break;
                 }
                 temp_i++;
 
                 if (temp_i == total) {
-                    found = true;
+                    oxygen_found = true;
                     break;
                 }
             }
 
-            if (found) {
+            if (oxygen_found) {
                 break;
             }
         }
 
-        for (Boolean oxygenBit : data.get(i)) {
+        int oxygen = 0;
+        for (Boolean oxygenBit : data.get(oxygen_i)) {
             oxygen = (oxygen << 1) | (oxygenBit ? 1 : 0);
         }
 
         // Find CO2 Rate
-        int co2 = 0;
-        for (ArrayList<Double> onesTally : onesTallyGraph) {
-            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(i, total));
-            int temp_i = i;
-            for (Double onesPercent : onesTally) {
-                if (Math.abs((1.0 - onesPercent) - 0.5) < 1.0e-9) {
-                    i = temp_i;
+        ArrayList<ArrayList<Double>> co2TallyGraph = new ArrayList<ArrayList<Double>>();
+        for (ArrayList<Boolean> bitList : dataTransposed) {
+            int i = 0;
+            ArrayList<Double> singleBitCo2TallyGraph = new ArrayList<Double>();
+            for (Boolean bit : bitList) {
+                if (singleBitCo2TallyGraph.size() <= i) {
+                    singleBitCo2TallyGraph.add(0.0); // Add new entry
+                }
+
+                // Why the heck is the toIndex for subList exclusive?
+                ArrayList<Boolean> subBitList = new ArrayList<Boolean>(bitList.subList(i, total));
+                for (Boolean subBit : subBitList) {
+                    if (!subBit) {
+                        double incremented = singleBitCo2TallyGraph.get(i).doubleValue() + 1.0;
+                        singleBitCo2TallyGraph.set(i, Double.valueOf(incremented));
+                    }
+                }
+
+                double percent = singleBitCo2TallyGraph.get(i) / (total - i);
+                singleBitCo2TallyGraph.set(i, percent);
+                i++;
+            }
+            co2TallyGraph.add(singleBitCo2TallyGraph);
+        }
+
+        int co2_i = 0;
+        boolean co2_found = false;
+
+        for (ArrayList<Double> onesTally : co2TallyGraph) {
+            ArrayList<Double> onesTallySub = new ArrayList<Double>(onesTally.subList(co2_i, total));
+            int temp_i = co2_i;
+            for (Double onesPercent : onesTallySub) {
+                if (Math.abs(onesPercent - 0.5) < 1.0e-9) {
+                    co2_i = temp_i;
                     break;
                 }
                 temp_i++;
 
                 if (temp_i == total) {
-                    found = true;
+                    co2_found = true;
                     break;
                 }
             }
 
-            if (found) {
+            if (co2_found) {
                 break;
             }
         }
 
-        for (Boolean co2Bit : data.get(i)) {
+        int co2 = 0;
+        for (Boolean co2Bit : data.get(co2_i)) {
             co2 = (co2 << 1) | (co2Bit ? 1 : 0);
         }
 
