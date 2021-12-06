@@ -2,6 +2,7 @@ public class BingoBoard {
     public static int k_boardSize = 5;
     /** Represents the locations on the bingo board */
     private BingoBoardLocation m_boardNumbers[][] = new BingoBoardLocation[k_boardSize][k_boardSize];
+    private boolean m_alreadyWon = false;
 
     public BingoBoard() {
 
@@ -33,6 +34,7 @@ public class BingoBoard {
             }
 
             if (rowResult) {
+                m_alreadyWon = true;
                 return true;
             }
         }
@@ -48,6 +50,7 @@ public class BingoBoard {
             }
 
             if (columnResult) {
+                m_alreadyWon = true;
                 return true;
             }
         }
@@ -67,6 +70,10 @@ public class BingoBoard {
         }
 
         return numberJustCalled * unmarkedSum;
+    }
+
+    public boolean alreadyWon() {
+        return m_alreadyWon;
     }
 
     class BingoBoardLocation {

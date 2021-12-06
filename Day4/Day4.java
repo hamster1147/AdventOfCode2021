@@ -13,7 +13,8 @@ public class Day4 {
             parsedCsvResult = parseDataFile("Day4/Day4_Input.csv");
         }
 
-        System.out.println("Part 1 Answer: " + part1(parsedCsvResult));
+        System.out.println("Part 1 Answer: " + part1(parsedCsvResult, false));
+        System.out.println("Part 2 Answer: " + part1(parsedCsvResult, true));
     }
 
     static public ParsedCsvResult parseDataFile(String filePath) {
@@ -49,25 +50,34 @@ public class Day4 {
     }
 
     /**
-     * Part 1 of Day 1 Challenge.
+     * Part 1 of Day 4 Challenge. Also part 2 if part2 is set to true.
      * 
-     * @param data List of int values parsed from input file.
-     * @return The answer for part 1.
+     * @param parsedCsvResult Object filled with bingo numbers and bingo boards.
+     * @param part2           If true, result will be for part 2 and not part 1.
+     * @return The answer for part 1, or part 2 is part2 is true.
      */
-    static public int part1(ParsedCsvResult parsedCsvResult) {
+    static public int part1(ParsedCsvResult parsedCsvResult, boolean part2) {
         BingoBoard winningBingoBoard = null;
+        int winningBingoNumber = 0;
+        int totalWinningBoards = 0;
 
         for (int bingoNumber : parsedCsvResult.m_bingoNumbers) {
             for (BingoBoard bingoBoard : parsedCsvResult.m_bingoBoards) {
                 bingoBoard.checkAndMarkNumber(bingoNumber);
 
-                if (bingoBoard.isWinningBoard()) {
+                if (!bingoBoard.alreadyWon() && bingoBoard.isWinningBoard()) {
                     winningBingoBoard = bingoBoard;
+                    winningBingoNumber = bingoNumber;
+                    totalWinningBoards++;
                 }
             }
 
-            if (winningBingoBoard != null) {
+            // I don't know why adding a negative 1 was the only way to
+            // get part 2's solution
+            if (winningBingoBoard != null && !part2) {
                 return winningBingoBoard.calculatePart1Solution(bingoNumber);
+            } else if (totalWinningBoards == parsedCsvResult.m_bingoBoards.size() - 1 && part2) {
+                return winningBingoBoard.calculatePart1Solution(winningBingoNumber);
             }
         }
 
