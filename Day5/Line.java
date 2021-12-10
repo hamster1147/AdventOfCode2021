@@ -10,6 +10,7 @@ public class Line {
 
     private Coordinate m_start;
     private Coordinate m_end;
+    private ArrayList<Coordinate> m_coordinates;
     private LineType m_type;
 
     public Line(int x1, int y1, int x2, int y2) {
@@ -21,6 +22,7 @@ public class Line {
         m_end = end;
         m_type = calculateLineType(m_start, m_end);
         fixCoordinateOrder();
+        m_coordinates = generateCoordinates();
     }
 
     // 561,579 -> 965,175
@@ -31,6 +33,7 @@ public class Line {
         m_end = new Coordinate(Integer.parseInt(coordinates[2]), Integer.parseInt(coordinates[3]));
         m_type = calculateLineType(m_start, m_end);
         fixCoordinateOrder();
+        m_coordinates = generateCoordinates();
     }
 
     private void fixCoordinateOrder() {
@@ -39,6 +42,21 @@ public class Line {
             m_start = m_end;
             m_end = temp;
         }
+    }
+
+    private ArrayList<Coordinate> generateCoordinates() {
+        ArrayList<Coordinate> list = new ArrayList<Coordinate>();
+        int deltaX = m_end.getX() - m_start.getX();
+        int deltaY = m_end.getY() - m_start.getY();
+        int totalPoints = Math.max(Math.abs(deltaX), Math.abs(deltaY));
+
+        for (int i = 0; i <= totalPoints; i++) {
+            int x = m_start.getX() + (i * (int) Math.signum(deltaX));
+            int y = m_start.getY() + (i * (int) Math.signum(deltaY));
+            list.add(new Coordinate(x, y));
+        }
+
+        return list;
     }
 
     public Coordinate getStart() {
@@ -51,6 +69,10 @@ public class Line {
 
     public LineType getLineType() {
         return m_type;
+    }
+
+    public ArrayList<Coordinate> getCoordinates() {
+        return m_coordinates;
     }
 
     private static LineType calculateLineType(Coordinate start, Coordinate end) {
@@ -73,61 +95,15 @@ public class Line {
     public static ArrayList<Coordinate> getIntersectingCoordinates(Line lineA, Line lineB) {
         ArrayList<Coordinate> result = new ArrayList<Coordinate>();
 
-        // Currently does not support diagonals
-        if (lineA.getLineType() == LineType.DIAGONAL_RISING ||
-                lineA.getLineType() == LineType.DIAGONAL_FALLING ||
-                lineB.getLineType() == LineType.DIAGONAL_RISING ||
-                lineB.getLineType() == LineType.DIAGONAL_FALLING) {
+        if (lineA.getLineType() == LineType.DIAGONAL_RISING || lineA.getLineType() == LineType.DIAGONAL_FALLING ||
+                lineB.getLineType() == LineType.DIAGONAL_RISING || lineB.getLineType() == LineType.DIAGONAL_FALLING) {
             return result;
         }
 
-        if (lineA.getLineType() == lineB.getLineType()) {
-            if (lineA.getLineType() == LineType.HORIZONTAL) {
-                if (lineA.getStart().getY() == lineB.getStart().getY()) {
-                    int start = 0;
-                    int end = 0;
-                    if (lineA.getStart().getX() >= lineB.getStart().getX()
-                            && lineA.getStart().getX() <= lineB.getEnd().getX()) {
-                        start = lineA.getStart().getX();
-                        end = lineB.getEnd().getX();
-                    } else if (lineB.getStart().getX() >= lineA.getStart().getX()
-                            && lineB.getStart().getX() <= lineA.getEnd().getX()) {
-                        start = lineB.getStart().getX();
-                        end = lineA.getEnd().getX();
-                    }
-
-                    for (int x = start; x <= end; x++) {
-                        result.add(new Coordinate(x, lineA.getStart().getY()));
-                    }
-                }
-            } else if (lineA.getLineType() == LineType.VERTICAL) {
-                if (lineA.getStart().getX() == lineB.getStart().getX()) {
-                    int start = 0;
-                    int end = 0;
-                    if (lineA.getStart().getY() >= lineB.getStart().getY()
-                            && lineA.getStart().getY() <= lineB.getEnd().getY()) {
-                        start = lineA.getStart().getY();
-                        end = lineB.getEnd().getY();
-                    } else if (lineB.getStart().getY() >= lineA.getStart().getY()
-                            && lineB.getStart().getY() <= lineA.getEnd().getY()) {
-                        start = lineB.getStart().getY();
-                        end = lineA.getEnd().getY();
-                    }
-
-                    for (int y = start; y <= end; y++) {
-                        result.add(new Coordinate(lineA.getStart().getX(), y));
-                    }
-                }
-            }
-        } else {
-            if (lineA.getStart().getX() >= lineB.getStart().getX() &&
-                    lineA.getStart().getX() >= lineB.getEnd().getX() ||
-                    lineB.getStart().getX() >= lineA.getStart().getX() &&
-                            lineB.getStart().getX() >= lineA.getEnd().getX()) {
-                if (lineA.getLineType() == LineType.VERTICAL) {
-                    result.add(new Coordinate(lineA.getStart().getX(), lineB.getStart().getY()));
-                } else {
-                    result.add(new Coordinate(lineB.getStart().getX(), lineA.getStart().getY()));
+        for (Coordinate coordA : lineA.getCoordinates()) {
+            for (Coordinate coordB : lineB.getCoordinates()) {
+                if (coordA.equals(coordB)) {
+                    result.add(coordA);
                 }
             }
         }

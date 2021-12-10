@@ -77,7 +77,7 @@ public class Day5 {
 
         int result = 0;
         for (Entry<Coordinate, Integer> entry : intersectionTally) {
-            if (entry.getValue() >= 2) {
+            if (entry.getValue() >= 1) {
                 result++;
             }
         }
