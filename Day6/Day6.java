@@ -86,12 +86,6 @@ class Day6 {
             System.out.println(i + " - " + count[i]);
         }
 
-        // count[0] = 1911853737;
-        // count[1] = 1322121852;
-        // count[2] = 922255946;
-        // count[3] = 431133578;
-        // count[4] = 73264713;
-
         for (Lanternfish fishy : fish) {
             totalCount += count[fishy.getAge() - 1];
         }
