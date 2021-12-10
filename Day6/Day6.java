@@ -74,14 +74,26 @@ class Day6 {
      * @param fish List of fish parsed from input file.
      * @return The answer for part 1.
      */
-    static public int part2(ArrayList<Lanternfish> fish, int days) {
-        int totalCount = 0;
+    static public long part2(ArrayList<Lanternfish> fish, int days) {
+        long totalCount = 0;
+        long count[] = new long[5];
 
-        int fishCount = 1;
+        // Generate the total counts for various ages
+        for (int i = 0; i < 5; i++) {
+            Lanternfish fishy = new Lanternfish(i + 1);
+
+            count[i] = fishy.familySizeAfterDays(days);
+            System.out.println(i + " - " + count[i]);
+        }
+
+        // count[0] = 1911853737;
+        // count[1] = 1322121852;
+        // count[2] = 922255946;
+        // count[3] = 431133578;
+        // count[4] = 73264713;
+
         for (Lanternfish fishy : fish) {
-            totalCount += fishy.familySizeAfterDays(days);
-            System.out.println("Fishy: " + fishCount);
-            fishCount++;
+            totalCount += count[fishy.getAge() - 1];
         }
 
         return totalCount;

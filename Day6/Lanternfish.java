@@ -18,6 +18,10 @@ public class Lanternfish {
         return result;
     }
 
+    public int getAge() {
+        return m_age;
+    }
+
     public void tick() {
         // Age children first since new children don't age yet
         for (Lanternfish kid : m_kids) {
@@ -33,8 +37,8 @@ public class Lanternfish {
         }
     }
 
-    public int familySizeAfterDays(int days) {
-        int totalCount = 1;
+    public long familySizeAfterDays(int days) {
+        long totalCount = 1;
 
         for (int day = days; day >= 1; day--) {
             if (m_age == 0) {
