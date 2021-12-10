@@ -16,7 +16,8 @@ public class Day5 {
             lineArray = parseDataFile("Day5/Day5_Input.csv");
         }
 
-        System.out.println("Part 1 Answer: " + part1(lineArray));
+        System.out.println("Part 1 Answer: " + part1(lineArray, false));
+        System.out.println("Part 2 Answer: " + part1(lineArray, true));
     }
 
     static public ArrayList<Line> parseDataFile(String filePath) {
@@ -42,7 +43,7 @@ public class Day5 {
      * @param lineArray Object filled with bingo numbers and bingo boards.
      * @return The answer for part 1, or part 2 is part2 is true.
      */
-    static public int part1(ArrayList<Line> lineArray) {
+    static public int part1(ArrayList<Line> lineArray, boolean part2) {
         ArrayList<Entry<Coordinate, Integer>> intersectionTally = new ArrayList<Entry<Coordinate, Integer>>();
 
         int i = 0;
@@ -50,7 +51,7 @@ public class Day5 {
             List<Line> subList = lineArray.subList(i, lineArray.size());
             for (Line lineB : subList) {
                 if (lineA != lineB) {
-                    ArrayList<Coordinate> intersections = Line.getIntersectingCoordinates(lineA, lineB);
+                    ArrayList<Coordinate> intersections = Line.getIntersectingCoordinates(lineA, lineB, part2);
 
                     if (intersections.size() > 0) {
                         for (Coordinate newIntersection : intersections) {

@@ -92,11 +92,12 @@ public class Line {
         }
     }
 
-    public static ArrayList<Coordinate> getIntersectingCoordinates(Line lineA, Line lineB) {
+    public static ArrayList<Coordinate> getIntersectingCoordinates(Line lineA, Line lineB, boolean part2) {
         ArrayList<Coordinate> result = new ArrayList<Coordinate>();
 
-        if (lineA.getLineType() == LineType.DIAGONAL_RISING || lineA.getLineType() == LineType.DIAGONAL_FALLING ||
-                lineB.getLineType() == LineType.DIAGONAL_RISING || lineB.getLineType() == LineType.DIAGONAL_FALLING) {
+        if ((lineA.getLineType() == LineType.DIAGONAL_RISING || lineA.getLineType() == LineType.DIAGONAL_FALLING ||
+                lineB.getLineType() == LineType.DIAGONAL_RISING || lineB.getLineType() == LineType.DIAGONAL_FALLING)
+                && !part2) {
             return result;
         }
 
