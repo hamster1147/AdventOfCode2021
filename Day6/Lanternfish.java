@@ -32,4 +32,20 @@ public class Lanternfish {
             m_age--;
         }
     }
+
+    public int familySizeAfterDays(int days) {
+        int totalCount = 1;
+
+        for (int day = days; day >= 1; day--) {
+            if (m_age == 0) {
+                Lanternfish kid = new Lanternfish(k_childStartingAge);
+                totalCount += kid.familySizeAfterDays(day - 1);
+                m_age = k_resetAge;
+            } else {
+                m_age--;
+            }
+        }
+
+        return totalCount;
+    }
 }
