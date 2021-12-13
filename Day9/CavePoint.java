@@ -1,5 +1,7 @@
+import java.util.ArrayList;
+
 public class CavePoint {
-    public static int k_defaultHeight = Integer.MAX_VALUE;
+    public static int k_maxHeight = 9;
 
     private int m_x;
     private int m_y;
@@ -12,7 +14,7 @@ public class CavePoint {
     public CavePoint() {
         m_x = Integer.MIN_VALUE;
         m_y = Integer.MIN_VALUE;
-        m_height = k_defaultHeight;
+        m_height = k_maxHeight;
         m_up = null;
         m_down = null;
         m_left = null;
@@ -22,7 +24,7 @@ public class CavePoint {
     public CavePoint(int x, int y) {
         m_x = x;
         m_y = y;
-        m_height = k_defaultHeight;
+        m_height = k_maxHeight;
         m_up = null;
         m_down = null;
         m_left = null;
@@ -61,6 +63,22 @@ public class CavePoint {
         return m_height;
     }
 
+    public CavePoint getUp() {
+        return m_up;
+    }
+
+    public CavePoint getDown() {
+        return m_down;
+    }
+
+    public CavePoint getLeft() {
+        return m_left;
+    }
+
+    public CavePoint getRight() {
+        return m_right;
+    }
+
     public void setUp(CavePoint up) {
         m_up = up;
     }
@@ -81,7 +99,25 @@ public class CavePoint {
         return (m_height < other.getHeight());
     }
 
+    public boolean isHeigher(CavePoint other) {
+        return (m_height > other.getHeight());
+    }
+
+    public boolean isMaxHeight() {
+        return (m_height == k_maxHeight);
+    }
+
     public boolean isLowestPoint() {
         return (isLower(m_up) && isLower(m_down) && isLower(m_left) && isLower(m_right));
+    }
+
+    public boolean isUnique(ArrayList<CavePoint> cavePointList) {
+        for (CavePoint cavePoint : cavePointList) {
+            if (cavePoint == this) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
