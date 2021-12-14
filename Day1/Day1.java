@@ -27,7 +27,6 @@ class Day1 {
                 data.add(Integer.parseInt(scanner.nextLine()));
             }
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
