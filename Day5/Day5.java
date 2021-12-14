@@ -30,7 +30,6 @@ public class Day5 {
                 lineArray.add(new Line(scanner.nextLine()));
             }
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

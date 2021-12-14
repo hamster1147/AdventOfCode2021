@@ -52,7 +52,6 @@ public class Day8 {
                 parsedData.add(new ParseResult(definition, solution));
             }
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

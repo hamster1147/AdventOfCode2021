@@ -30,7 +30,6 @@ public class Day4 {
 
             // Parse bingo boards
             while (scanner.hasNext()) {
-                String emptyLine = scanner.nextLine();
                 BingoBoard board = new BingoBoard();
                 parsedCsvResult.m_bingoBoards.add(board);
 
@@ -42,7 +41,6 @@ public class Day4 {
                 }
             }
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

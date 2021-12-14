@@ -30,7 +30,6 @@ public class Day9 {
 
             cave.populateCavePointReferences();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

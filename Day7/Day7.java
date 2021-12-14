@@ -50,7 +50,6 @@ class Day7 {
                 result.set(num + min, entry);
             }
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
