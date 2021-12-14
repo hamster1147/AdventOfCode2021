@@ -14,7 +14,7 @@ public class Day11 {
             grid = parseDataFile("Day11/Day11_Input.csv");
         }
 
-        System.out.println("Part 1 Answer: " + part1(grid));
+        System.out.println("Part 1 Answer: " + part1(grid, 100));
     }
 
     static public OctopusGrid parseDataFile(String filePath) {
@@ -41,8 +41,12 @@ public class Day11 {
      * @param cave Object containing the parsed data from the input file.
      * @return The answer for part 1.
      */
-    static public int part1(OctopusGrid grid) {
+    static public int part1(OctopusGrid grid, int totalSteps) {
         int total = 0;
+
+        for (int i = 0; i < totalSteps; i++) {
+            total += grid.step();
+        }
 
         return total;
     }

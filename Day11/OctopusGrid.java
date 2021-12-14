@@ -35,6 +35,17 @@ public class OctopusGrid {
         }
     }
 
+    public int step() {
+        int flashTotal = 0;
+        for (ArrayList<Octopus> list : m_grid) {
+            for (Octopus octopus : list) {
+                flashTotal += octopus.step();
+            }
+        }
+
+        return flashTotal;
+    }
+
     public void populateOctopusReferences() {
         for (ArrayList<Octopus> cavePointRow : m_grid) {
             for (Octopus cavePoint : cavePointRow) {

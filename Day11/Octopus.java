@@ -60,6 +60,36 @@ public class Octopus {
         m_left = left;
     }
 
+    public int step() {
+        return increaseEnergy();
+    }
+
+    public int increaseEnergy() {
+        m_energy++;
+        if (m_energy >= k_maxEnergy) {
+            return flash();
+        }
+        return 0;
+    }
+
+    public int flash() {
+        m_energy = k_minEnergy;
+        return spreadEnergy() + 1;
+    }
+
+    public int spreadEnergy() {
+        int flashTotal = 0;
+        flashTotal += m_topLeft.increaseEnergy();
+        flashTotal += m_top.increaseEnergy();
+        flashTotal += m_topRight.increaseEnergy();
+        flashTotal += m_right.increaseEnergy();
+        flashTotal += m_bottomRight.increaseEnergy();
+        flashTotal += m_bottom.increaseEnergy();
+        flashTotal += m_bottomLeft.increaseEnergy();
+        flashTotal += m_left.increaseEnergy();
+        return flashTotal;
+    }
+
     public int getX() {
         return m_x;
     }
