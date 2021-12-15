@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 
 public class OctopusGrid {
-    ArrayList<ArrayList<Octopus>> m_grid;
+    private ArrayList<ArrayList<Octopus>> m_grid;
+    private boolean m_allFlashed;
 
     public OctopusGrid() {
         m_grid = new ArrayList<ArrayList<Octopus>>();
+        m_allFlashed = false;
     }
 
     public void addRowString(String rowString) {
@@ -56,13 +58,25 @@ public class OctopusGrid {
             }
         } while (flashDetected);
 
+        m_allFlashed = true;
         for (ArrayList<Octopus> list : m_grid) {
             for (Octopus octopus : list) {
                 octopus.finishStep();
+                if (octopus.getEnergy() != 0) {
+                    m_allFlashed = false;
+                }
             }
         }
 
+        if (m_allFlashed) {
+            return 0;
+        }
+
         return flashTotal;
+    }
+
+    public boolean getAllFlashed() {
+        return m_allFlashed;
     }
 
     public void populateOctopusReferences() {
@@ -78,5 +92,18 @@ public class OctopusGrid {
                 cavePoint.setLeft(getOctopus(cavePoint.getX() - 1, cavePoint.getY()));
             }
         }
+    }
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        for (ArrayList<Octopus> list : m_grid) {
+            for (Octopus octopus : list) {
+                result.append(octopus.getEnergy());
+            }
+            result.append('\n');
+        }
+
+        return result.toString();
     }
 }

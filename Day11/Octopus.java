@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Octopus {
     public static int k_minEnergy = 0;
     public static int k_maxEnergy = 9;
