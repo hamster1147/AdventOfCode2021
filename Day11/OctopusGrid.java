@@ -39,7 +39,26 @@ public class OctopusGrid {
         int flashTotal = 0;
         for (ArrayList<Octopus> list : m_grid) {
             for (Octopus octopus : list) {
-                flashTotal += octopus.step();
+                octopus.step();
+            }
+        }
+
+        boolean flashDetected = false;
+        do {
+            flashDetected = false;
+            for (ArrayList<Octopus> list : m_grid) {
+                for (Octopus octopus : list) {
+                    if (octopus.flash()) {
+                        flashTotal++;
+                        flashDetected = true;
+                    }
+                }
+            }
+        } while (flashDetected);
+
+        for (ArrayList<Octopus> list : m_grid) {
+            for (Octopus octopus : list) {
+                octopus.finishStep();
             }
         }
 

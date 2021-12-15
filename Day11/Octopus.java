@@ -8,6 +8,7 @@ public class Octopus {
     private int m_x;
     private int m_y;
     private int m_energy;
+    private boolean m_flashed;
     private Octopus m_topLeft;
     private Octopus m_top;
     private Octopus m_topRight;
@@ -29,6 +30,7 @@ public class Octopus {
         m_bottom = null;
         m_bottomLeft = null;
         m_left = null;
+        m_flashed = false;
     }
 
     public Octopus(int x, int y, int energy) {
@@ -43,6 +45,7 @@ public class Octopus {
         m_bottom = null;
         m_bottomLeft = null;
         m_left = null;
+        m_flashed = false;
     }
 
     public Octopus(int x, int y, int energy, Octopus topLeft, Octopus top, Octopus topRight, Octopus right,
@@ -58,36 +61,45 @@ public class Octopus {
         m_bottom = bottom;
         m_bottomLeft = bottomLeft;
         m_left = left;
+        m_flashed = false;
     }
 
-    public int step() {
-        return increaseEnergy();
+    public void step() {
+        increaseEnergy();
     }
 
-    public int increaseEnergy() {
-        m_energy++;
-        if (m_energy >= k_maxEnergy) {
-            return flash();
+    public void increaseEnergy() {
+        if (m_energy != k_fakeOctopusEnergy) {
+            m_energy++;
         }
-        return 0;
     }
 
-    public int flash() {
-        m_energy = k_minEnergy;
-        return spreadEnergy() + 1;
+    public boolean flash() {
+        if (m_energy > k_maxEnergy && !m_flashed) {
+            m_flashed = true;
+            spreadEnergy();
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public int spreadEnergy() {
-        int flashTotal = 0;
-        flashTotal += m_topLeft.increaseEnergy();
-        flashTotal += m_top.increaseEnergy();
-        flashTotal += m_topRight.increaseEnergy();
-        flashTotal += m_right.increaseEnergy();
-        flashTotal += m_bottomRight.increaseEnergy();
-        flashTotal += m_bottom.increaseEnergy();
-        flashTotal += m_bottomLeft.increaseEnergy();
-        flashTotal += m_left.increaseEnergy();
-        return flashTotal;
+    public void spreadEnergy() {
+        m_topLeft.increaseEnergy();
+        m_top.increaseEnergy();
+        m_topRight.increaseEnergy();
+        m_right.increaseEnergy();
+        m_bottomRight.increaseEnergy();
+        m_bottom.increaseEnergy();
+        m_bottomLeft.increaseEnergy();
+        m_left.increaseEnergy();
+    }
+
+    public void finishStep() {
+        if (m_flashed) {
+            m_flashed = false;
+            m_energy = k_minEnergy;
+        }
     }
 
     public int getX() {
