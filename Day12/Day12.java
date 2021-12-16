@@ -10,7 +10,7 @@ public class Day12 {
         if (args.length >= 2) {
             caveSystem = parseDataFile(args[1]);
         } else {
-            caveSystem = parseDataFile("Day12/Day12_Example_Input.csv");
+            caveSystem = parseDataFile("Day12/Day12_Input.csv");
         }
 
         System.out.println("Part 1 Answer: " + part1(caveSystem));
@@ -41,9 +41,9 @@ public class Day12 {
     static public int part1(CaveSystem caveSystem) {
         ArrayList<CavePath> paths = caveSystem.spelunk();
 
-        for (CavePath path : paths) {
-            System.out.println(path);
-        }
+        // for (CavePath path : paths) {
+        // System.out.println(path);
+        // }
 
         return paths.size();
     }

@@ -41,7 +41,7 @@ public class CaveSite {
             }
 
             // We can't go through a cave more then once if its not small.
-            if (passCount < 2 && (passCount < 1 || !cave.isSmall())) {
+            if (passCount < 1 || !cave.isSmall()) {
                 ArrayList<CavePath> returnedPaths = cave.spelunk(newPath);
                 // Add returned paths to our list of paths to return
                 for (CavePath path : returnedPaths) {
