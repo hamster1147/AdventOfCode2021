@@ -15,14 +15,11 @@ public class CaveSite {
         m_connectingCaves = new ArrayList<CaveSite>();
     }
 
-    public ArrayList<CavePath> spelunk(CavePath currentPath) {
+    public ArrayList<CavePath> spelunk(CavePath currentPath, boolean part2) {
         ArrayList<CavePath> paths = new ArrayList<CavePath>();
 
         // Make unique CavePath
-        CavePath newPath = new CavePath();
-        for (CaveSite cave : currentPath.getList()) {
-            newPath.getList().add(cave);
-        }
+        CavePath newPath = new CavePath(currentPath);
         newPath.getList().add(this);
 
         // We are at the end, add our current unique path to the list and return it.
@@ -41,11 +38,22 @@ public class CaveSite {
             }
 
             // We can't go through a cave more then once if its not small.
-            if (passCount < 1 || !cave.isSmall()) {
-                ArrayList<CavePath> returnedPaths = cave.spelunk(newPath);
+            boolean nextCaveIsPlannedSmallCave = (cave == newPath.getPlannedToVisitTwiceSmallCave());
+            if (passCount < 1 || !cave.isSmall() || (passCount < 2 && nextCaveIsPlannedSmallCave)) {
+                ArrayList<CavePath> returnedPaths = cave.spelunk(newPath, part2);
                 // Add returned paths to our list of paths to return
                 for (CavePath path : returnedPaths) {
                     paths.add(path);
+                }
+
+                // For part 2, we are allowed to visit a single small cave twice
+                if (part2 && isSmall()) {
+                    newPath.setPlannedToVisitTwiceSmallCave(cave);
+                    returnedPaths = cave.spelunk(newPath, part2);
+                    // Add returned paths to our list of paths to return
+                    for (CavePath path : returnedPaths) {
+                        paths.add(path);
+                    }
                 }
             }
         }
