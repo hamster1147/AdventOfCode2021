@@ -42,4 +42,19 @@ public class CaveSystem {
         leftPoint.addConnection(rightPoint);
         rightPoint.addConnection(leftPoint);
     }
+
+    public ArrayList<CavePath> spelunk() {
+        ArrayList<CavePath> paths = null;
+
+        for (CaveSite cave : m_cavePoints) {
+            if (cave.getName().equals(k_startString)) {
+                // Spelunk function needs a CavePath to build its current path off of
+                CavePath currentPath = new CavePath();
+                paths = cave.spelunk(currentPath);
+                break;
+            }
+        }
+
+        return paths;
+    }
 }

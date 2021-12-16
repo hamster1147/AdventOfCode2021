@@ -15,6 +15,44 @@ public class CaveSite {
         m_connectingCaves = new ArrayList<CaveSite>();
     }
 
+    public ArrayList<CavePath> spelunk(CavePath currentPath) {
+        ArrayList<CavePath> paths = new ArrayList<CavePath>();
+
+        // Make unique CavePath
+        CavePath newPath = new CavePath();
+        for (CaveSite cave : currentPath.getList()) {
+            newPath.getList().add(cave);
+        }
+        newPath.getList().add(this);
+
+        // We are at the end, add our current unique path to the list and return it.
+        if (isEnd()) {
+            paths.add(newPath);
+            return paths;
+        }
+
+        for (CaveSite cave : m_connectingCaves) {
+            // Check how many times we've been to the next cave
+            int passCount = 0;
+            for (CaveSite previousCave : newPath.getList()) {
+                if (cave == previousCave) {
+                    passCount++;
+                }
+            }
+
+            // We can't go through a cave more then once if its not small.
+            if (passCount < 2 && (passCount < 1 || !cave.isSmall())) {
+                ArrayList<CavePath> returnedPaths = cave.spelunk(newPath);
+                // Add returned paths to our list of paths to return
+                for (CavePath path : returnedPaths) {
+                    paths.add(path);
+                }
+            }
+        }
+
+        return paths;
+    }
+
     public void addConnection(CaveSite cave) {
         m_connectingCaves.add(cave);
     }

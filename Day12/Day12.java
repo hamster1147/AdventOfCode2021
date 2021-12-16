@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Day12 {
@@ -9,7 +10,7 @@ public class Day12 {
         if (args.length >= 2) {
             caveSystem = parseDataFile(args[1]);
         } else {
-            caveSystem = parseDataFile("Day12/Day12_Input.csv");
+            caveSystem = parseDataFile("Day12/Day12_Example_Input.csv");
         }
 
         System.out.println("Part 1 Answer: " + part1(caveSystem));
@@ -38,8 +39,12 @@ public class Day12 {
      * @return The answer for part 1.
      */
     static public int part1(CaveSystem caveSystem) {
-        int total = 0;
+        ArrayList<CavePath> paths = caveSystem.spelunk();
 
-        return total;
+        for (CavePath path : paths) {
+            System.out.println(path);
+        }
+
+        return paths.size();
     }
 }
