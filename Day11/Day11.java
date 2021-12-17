@@ -53,6 +53,7 @@ public class Day11 {
 
         for (int i = 0; i < totalSteps; i++) {
             total += grid.step();
+            // System.out.println("Step : " + (i + 1) + '\n' + grid.toString());
         }
 
         return total;
