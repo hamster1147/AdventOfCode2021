@@ -3,11 +3,12 @@ import java.util.ArrayList;
 public class CavePath {
     private ArrayList<CaveSite> m_path;
     private CaveSite m_plannedSmallCaveToVisitTwice;
-    // private boolean m_smallCaveVisitedTwice;
+    private ArrayList<CaveSite> m_avoidSmallCaveTwice;
 
     public CavePath() {
         m_path = new ArrayList<CaveSite>();
         m_plannedSmallCaveToVisitTwice = null;
+        m_avoidSmallCaveTwice = new ArrayList<CaveSite>();
         // m_smallCaveVisitedTwice = false;
     }
 
@@ -17,21 +18,24 @@ public class CavePath {
             m_path.add(cave);
         }
 
+        for (CaveSite cave : otherPath.getAvoidSmallCaveList()) {
+
+        }
         m_plannedSmallCaveToVisitTwice = otherPath.getPlannedToVisitTwiceSmallCave();
-        // m_smallCaveVisitedTwice = false;
+
+        m_avoidSmallCaveTwice = new ArrayList<CaveSite>();
+        for (CaveSite cave : otherPath.getAvoidSmallCaveList()) {
+            m_avoidSmallCaveTwice.add(cave);
+        }
     }
 
     public ArrayList<CaveSite> getList() {
         return m_path;
     }
 
-    // public void visitedPlannedSmallCaveTwice() {
-    // m_smallCaveVisitedTwice = true;
-    // }
-
-    // public boolean planToVisitSmallCaveTwice() {
-    // return m_smallCaveVisitedTwice;
-    // }
+    public ArrayList<CaveSite> getAvoidSmallCaveList() {
+        return m_avoidSmallCaveTwice;
+    }
 
     public void setPlannedToVisitTwiceSmallCave(CaveSite smallCave) {
         m_plannedSmallCaveToVisitTwice = smallCave;

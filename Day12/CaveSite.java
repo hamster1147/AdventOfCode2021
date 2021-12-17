@@ -29,6 +29,10 @@ public class CaveSite {
         }
 
         for (CaveSite cave : m_connectingCaves) {
+            if (cave.isStart()) {
+                continue;
+            }
+
             // Check how many times we've been to the next cave
             int passCount = 0;
             for (CaveSite previousCave : newPath.getList()) {
@@ -37,22 +41,39 @@ public class CaveSite {
                 }
             }
 
-            // We can't go through a cave more then once if its not small.
-            boolean nextCaveIsPlannedSmallCave = (cave == newPath.getPlannedToVisitTwiceSmallCave());
-            if (passCount < 1 || !cave.isSmall() || (passCount < 2 && nextCaveIsPlannedSmallCave)) {
+            if (!cave.isSmall()) {
                 ArrayList<CavePath> returnedPaths = cave.spelunk(newPath, part2);
                 // Add returned paths to our list of paths to return
                 for (CavePath path : returnedPaths) {
                     paths.add(path);
                 }
-
-                // For part 2, we are allowed to visit a single small cave twice
-                if (part2 && isSmall()) {
-                    newPath.setPlannedToVisitTwiceSmallCave(cave);
-                    returnedPaths = cave.spelunk(newPath, part2);
+            } else {
+                // We can't go through a cave more then once if its small, unless its part 2.
+                boolean plannedSmallCave = (cave == newPath.getPlannedToVisitTwiceSmallCave());
+                if (passCount < 1 || !cave.isSmall() || (passCount < 2 && plannedSmallCave)) {
+                    CavePath newNewPath = new CavePath(newPath);
+                    newNewPath.getAvoidSmallCaveList().add(cave);
+                    ArrayList<CavePath> returnedPaths = cave.spelunk(newNewPath, part2);
                     // Add returned paths to our list of paths to return
                     for (CavePath path : returnedPaths) {
                         paths.add(path);
+                    }
+
+                    boolean avoidSmallCave = false;
+                    for (CaveSite avoidCave : currentPath.getAvoidSmallCaveList()) {
+                        if (cave == avoidCave) {
+                            avoidSmallCave = true;
+                        }
+                    }
+
+                    // For part 2, we are allowed to visit a single small cave twice
+                    if (part2 && cave.isSmall() && !avoidSmallCave && !cave.isEnd()) {
+                        newPath.setPlannedToVisitTwiceSmallCave(cave);
+                        returnedPaths = cave.spelunk(newPath, part2);
+                        // Add returned paths to our list of paths to return
+                        for (CavePath path : returnedPaths) {
+                            paths.add(path);
+                        }
                     }
                 }
             }
