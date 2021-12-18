@@ -4,19 +4,44 @@ import java.util.Map.Entry;
 
 public class Polymerizer {
     ArrayList<Character> m_elements;
-    ArrayList<PairInsertionRules> m_rules;
+    ArrayList<PairInsertionRule> m_rules;
 
     public Polymerizer() {
         m_elements = new ArrayList<Character>();
-        m_rules = new ArrayList<PairInsertionRules>();
+        m_rules = new ArrayList<PairInsertionRule>();
     }
 
     public ArrayList<Character> getElementsList() {
         return m_elements;
     }
 
-    public ArrayList<PairInsertionRules> getRulesList() {
+    public ArrayList<PairInsertionRule> getRulesList() {
         return m_rules;
+    }
+
+    private void setupRuleReferences() {
+        for (PairInsertionRule rule : m_rules) {
+            rule.setupReferences(m_rules);
+        }
+    }
+
+    public ElementTotals polymerize(int count) {
+        ElementTotals totals = new ElementTotals();
+
+        setupRuleReferences();
+
+        for (int i = 1; i < m_elements.size(); i++) {
+            for (PairInsertionRule rule : m_rules) {
+                if (rule.match(String.valueOf(m_elements.get(i - 1)) + m_elements.get(i))) {
+                    totals = rule.polymerize(totals, count);
+                }
+            }
+            System.out.println(i + " out of " + m_elements.size());
+        }
+
+        totals.addElement(m_elements.get(m_elements.size() - 1));
+
+        return totals;
     }
 
     public void polymerize() {
@@ -24,7 +49,7 @@ public class Polymerizer {
 
         for (int i = 1; i < m_elements.size(); i++) {
             Character newElement = null;
-            for (PairInsertionRules rule : m_rules) {
+            for (PairInsertionRule rule : m_rules) {
                 newElement = rule.getInsertion(String.valueOf(m_elements.get(i - 1)) + m_elements.get(i));
                 if (newElement != null) {
                     break;
@@ -42,7 +67,7 @@ public class Polymerizer {
         m_elements = newElementsList;
     }
 
-    public int getSolution() {
+    public int getPart1Solution() {
         ArrayList<Entry<Character, Integer>> elementTally = new ArrayList<Entry<Character, Integer>>();
 
         for (Character element : m_elements) {
