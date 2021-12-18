@@ -13,6 +13,8 @@ public class Day13 {
         }
 
         System.out.println("Part 1 Answer: " + part1(paper));
+        System.out.println("Part 2 Answer:");
+        part2(paper);
     }
 
     static public Paper parseDataFile(String filePath) {
@@ -47,5 +49,10 @@ public class Day13 {
     static public int part1(Paper paper) {
         paper.fold(paper.getFoldsList().get(0));
         return paper.getMarkingList().size();
+    }
+
+    static public void part2(Paper paper) {
+        paper.carryOutFolds();
+        System.out.println(paper.toString());
     }
 }

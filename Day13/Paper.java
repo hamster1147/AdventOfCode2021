@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Paper {
     private ArrayList<PaperMark> m_markings;
@@ -41,5 +42,36 @@ public class Paper {
             }
         }
         m_markings = newMarkings;
+    }
+
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+
+        int maxX = 0;
+        int maxY = 0;
+        for (PaperMark mark : m_markings) {
+            maxX = Math.max(maxX, mark.getX());
+            maxY = Math.max(maxY, mark.getY());
+        }
+
+        for (int y = 0; y <= maxY; y++) {
+            for (int x = 0; x <= maxX; x++) {
+                boolean markFound = false;
+                for (PaperMark mark : m_markings) {
+                    if (x == mark.getX() && y == mark.getY()) {
+                        string.append('*');
+                        markFound = true;
+                        break;
+                    }
+                }
+
+                if (!markFound) {
+                    string.append(' ');
+                }
+            }
+            string.append('\n');
+        }
+
+        return string.toString();
     }
 }
